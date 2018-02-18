@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    
+    <meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>D3.js tutorial - 13 - The Pie Layout</title>
+
+  
+
+    <!-- D3.js CDN source -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	</head>
+
+  <body>
+  
+		<script>
+		
+		// basic data array
+		
+		var data = [10, 50, 80];
+		
+		// radius 
+		
+		var r =300;
+		
+		var color = d3.scale.ordinal()
+			.range(["#ee2fff", "#9945ff", "#3762ff"]);
+		
+		// canvas
+		
+		var canvas = d3.select("body").append("svg")
+			.attr("width", 1500)
+			.attr("height", 1500);
+			
+		var group = canvas.append("g")
+			.attr("transform", "translate(300, 300)");
+			
+		// drawing an arc 
+		
+		var arc = d3.svg.arc()
+			.innerRadius(150)
+			.outerRadius(r);
+			
+		// pie layout - accessing and returning data
+		
+		var pie = d3.layout.pie()
+			.value(function (d) { return d; });
+			
+		// binding data to document, selscting 	everything that has a class arc
+		
+		var arcs = group.selectAll(".arc")
+			.data(pie(data))
+			.enter()
+			.append("g")
+			.attr("class", "arc");
+			
+		// creating a path to each of returned objects 
+		
+		arcs.append("path")
+			.attr("d", arc)
+			.attr("fill", function (d) { return color(d.data); });
+			
+		// appending to each group text element 	
+		// putting the labels on the right place
+		
+		arcs.append("text")
+			.attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")"; })
+			.attr("text-anchor", "middle")
+			.attr("font-size", "1.5em")
+			.text (function (d) { return d.data; });
+			
+		
+		
+		</script>
+  
+  
+  
+  </body>
+  </html>
+  
